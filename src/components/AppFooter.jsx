@@ -1,0 +1,11 @@
+import React from 'react';
+
+const AppFooter = () => {
+  return (
+    <footer className="app-footer">
+      <p>{new Date().getFullYear()} Kalkulator Apel David</p>
+    </footer>
+  );
+};
+
+export default AppFooter;
