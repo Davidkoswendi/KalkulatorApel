@@ -14,14 +14,10 @@ import React, { useState } from "react";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 
 const CalculatorControls = ({ onCalculate, onReset }) => {
-  // State untuk menyimpan input angka pertama
-  const [num1, setNum1] = useState("");
-  // State untuk menyimpan input angka kedua
-  const [num2, setNum2] = useState("");
-  // State untuk menyimpan operasi matematika yang dipilih (default: penjumlahan)
-  const [operation, setOperation] = useState("+");
-  // State untuk menampilkan pesan error
-  const [error, setError] = useState("");
+  const [num1, setNum1] = useState("");  // State untuk menyimpan input angka pertama
+  const [num2, setNum2] = useState("");  // State untuk menyimpan input angka kedua
+  const [operation, setOperation] = useState("+");  // State untuk menyimpan operasi matematika yang dipilih (default: penjumlahan)
+  const [error, setError] = useState("");  // State untuk menampilkan pesan error
 
   // Handler untuk submit form
   const handleSubmit = (e) => {
