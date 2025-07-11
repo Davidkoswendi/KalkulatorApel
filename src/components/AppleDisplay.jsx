@@ -13,18 +13,14 @@ import threeQuarterApple from "../assets/three-quarter-apple.png"; // 3/4 apel
 import { FaAppleAlt } from "react-icons/fa"; // Ikon apel
 
 const AppleDisplay = ({ num1, num2, operation, result }) => {
-  // Batas maksimal apel yang ditampilkan (lebih dari ini akan ditampilkan sebagai teks)
-  const MAX_APPLES = 1000;
+  const MAX_APPLES = 1000; // Batas maksimal apel yang ditampilkan (lebih dari ini akan ditampilkan sebagai teks)
 
   /**
    * Mengubah angka menjadi teks bahasa Indonesia
    * Contoh: 123 → "seratus dua puluh tiga"
-   * @param {number} number - Angka yang akan dikonversi
-   * @returns {string} Teks representasi angka
    */
   const readNumber = (number) => {
-    // Handle nilai null/undefined
-    if (number === null || number === undefined) return "";
+    if (number === null || number === undefined) return "";  // Handle nilai null/undefined
     
     // Konversi ke number
     const num = parseFloat(number);
@@ -37,7 +33,7 @@ const AppleDisplay = ({ num1, num2, operation, result }) => {
       return `negatif ${readNumber(Math.abs(num))}`;
     }
     
-    // Daftar satuan (ribu, juta, etc)
+    // Daftar satuan (ribu, juta, miliar, triliun)
     const units = ['', 'ribu', 'juta', 'miliar', 'triliun'];
     
     // Daftar angka 0-19
@@ -95,8 +91,6 @@ const AppleDisplay = ({ num1, num2, operation, result }) => {
   /**
    * Memformat angka dengan separator ribuan
    * Contoh: 1000 → "1.000"
-   * @param {number} num - Angka yang akan diformat
-   * @returns {string} Angka yang sudah diformat
    */
   const formatNumber = (num) => {
     if (num === null || num === undefined) return "";
@@ -113,15 +107,11 @@ const AppleDisplay = ({ num1, num2, operation, result }) => {
     
     // Gabungkan kembali jika ada desimal
     const formatted = parts.length > 1 ? parts.join(',') : parts[0];
-    
-    // Tambahkan tanda negatif jika perlu
     return isNegative ? `-${formatted}` : formatted;
   };
 
   /**
    * Render gambar apel berdasarkan angka
-   * @param {number} count - Jumlah apel yang akan dirender
-   * @returns {JSX.Element} Kumpulan gambar apel
    */
   const renderApples = (count) => {
     if (count === null || count === undefined) return null;

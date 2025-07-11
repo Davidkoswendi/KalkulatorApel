@@ -23,9 +23,8 @@ import adventureTrack from './assets/sounds/adventure-music.mp3'; // Musik game
 import "bootstrap/dist/css/bootstrap.min.css"; // CSS Bootstrap
 import "./styles.css"; // CSS custom
 
-/**
- * Komponen AppWrapper - Layout utama aplikasi
- */
+
+// Komponen AppWrapper - Layout utama aplikasi
 const AppWrapper = () => {
   // Mengambil lokasi/rute saat ini
   const location = useLocation();
@@ -85,9 +84,8 @@ const AppWrapper = () => {
   );
 };
 
-/**
- * Komponen App utama yang membungkus dengan Router
- */
+
+// Komponen App utama yang membungkus dengan Router
 const App = () => {
   return (
     <Router>
@@ -98,10 +96,7 @@ const App = () => {
 
 export default App;
 
-/**
- * Fungsi utilitas untuk memainkan efek suara
- * @param {string} url - Path/lokasi file suara
- */
+//  Fungsi utilitas untuk memainkan efek suara
 export const playSound = (url) => {
   const audio = new Audio(url); // Buat objek audio
   audio.volume = 0.6; // Set volume menjadi 60%

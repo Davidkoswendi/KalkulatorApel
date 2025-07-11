@@ -62,12 +62,7 @@ const CalculatorPage = () => {
     localStorage.setItem("calcHistory", JSON.stringify(history));
   }, [history]);
 
-  /**
-   * Fungsi utama untuk melakukan perhitungan
-   * @param {number} num1 - Angka pertama
-   * @param {number} num2 - Angka kedua
-   * @param {string} op - Operator (+, -, *, /)
-   */
+  // Fungsi utama untuk melakukan perhitungan
   const calculate = (num1, num2, op) => {
     let calculatedResult;
     
@@ -126,7 +121,7 @@ const CalculatorPage = () => {
 
   /**
    * Hapus item dari riwayat
-   * @param {string} id - ID item yang akan dihapus
+   *- ID item yang akan dihapus
    */
   const removeHistoryItem = (id) => {
     setHistory(prev => prev.filter(item => item.id !== id));
