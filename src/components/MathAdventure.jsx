@@ -1,3 +1,14 @@
+/**
+ * FILE: src/components/MathAdventure.js
+ * GAME EDUKASI MATEMATIKA APEL
+ * Fitur:
+ * - 10 level kesulitan progresif (penjumlahan hingga operasi campuran)
+ * - Sistem nyawa, skor, dan timer
+ * - Animasi visual dan efek suara
+ * - Review jawaban setelah game selesai
+ * - Responsive design
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaClock, FaTrophy, FaHome, FaCheck, FaTimes, FaExclamationTriangle, FaAppleAlt } from 'react-icons/fa';
@@ -7,18 +18,28 @@ import wrongSound from '../assets/sounds/wrong.mp3';
 import gameoverSound from '../assets/sounds/gameover.mp3';
 import winSound from '../assets/sounds/win.mp3';
 
+/**
+ * Memainkan efek suara
+ * @param {string} soundFile - Path file suara
+ */
 const playSound = (soundFile) => {
   const audio = new Audio(soundFile);
-  audio.play().catch(e => console.log("Audio play failed:", e));
+  audio.play().catch(e => console.log("Gagal memainkan suara:", e));
 };
 
+/**
+ * Komponen Feedback Jawaban
+ * @param {boolean} isCorrect - Status benar/salah jawaban
+ */
 const AnswerFeedback = ({ isCorrect }) => {
+  // Data untuk animasi apel jatuh
   const apples = isCorrect
     ? Array.from({ length: 10 }, (_, i) => ({
         id: i,
         left: Math.random() * 100,
         delay: Math.random() * 0.5,
-        duration: 2 + Math.random() * 3
+        duration: 2 + Math.random() * 3,
+        size: 1 + Math.random() * 0.5
       }))
     : [];
 
@@ -42,6 +63,7 @@ const AnswerFeedback = ({ isCorrect }) => {
           className="falling-apple"
           style={{
             left: `${apple.left}%`,
+            fontSize: `${apple.size}rem`,
             animation: `appleFall ${apple.duration}s ${apple.delay}s forwards`
           }}
         />
@@ -50,8 +72,13 @@ const AnswerFeedback = ({ isCorrect }) => {
   );
 };
 
+/**
+ * Komponen Utama Game Matematika
+ */
 const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
   const navigate = useNavigate();
+  
+  // State utama game
   const [gameState, setGameState] = useState({
     score: 0,
     timeLeft: 20,
@@ -72,18 +99,28 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     isCorrect: false
   });
 
+  // Fungsi pembantu
   const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+  /**
+   * Membuat soal pembagian dengan hasil bilangan bulat
+   * @param {number} max - Nilai maksimum
+   */
+  const createDivision = (max) => {
+    let divisor = getRandomInt(1, 10);
+    let dividend = divisor * getRandomInt(1, Math.floor(max/divisor));
+    return { dividend, divisor };
+  };
+
+  /**
+   * Generate soal berdasarkan level
+   * @param {number} level - Level kesulitan (1-10)
+   */
   const generateQuestion = (level) => {
     let question, answer;
     let a, b, c, d;
 
-    const createDivision = (max) => {
-      let divisor = getRandomInt(1, 10);
-      let dividend = divisor * getRandomInt(1, Math.floor(max/divisor));
-      return { dividend, divisor };
-    };
-
+    // LEVEL 1: Penjumlahan/pengurangan 1-10
     if (level === 1) {
       a = getRandomInt(1, 10);
       b = getRandomInt(1, 10);
@@ -95,6 +132,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
         answer = a;
       }
     }
+    // LEVEL 2: Bilangan belasan
     else if (level === 2) {
       a = getRandomInt(10, 19);
       b = getRandomInt(1, 9);
@@ -106,6 +144,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
         answer = a - b;
       }
     }
+    // LEVEL 3: Bilangan puluhan
     else if (level === 3) {
       a = getRandomInt(20, 50);
       b = getRandomInt(10, 20);
@@ -117,6 +156,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
         answer = a - b;
       }
     }
+    // LEVEL 4-6: Perkalian/pembagian
     else if (level === 4) {
       if (Math.random() > 0.5) {
         a = getRandomInt(1, 10);
@@ -153,51 +193,41 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
         answer = dividend / divisor;
       }
     }
+    // LEVEL 7-10: Operasi campuran KABATAKU
     else if (level === 7 || level === 8) {
       const ops = ['+', '-', '×', '÷'];
       
       do {
-        // Generate expressions that will definitely result in integers
-        const op1 = ops[getRandomInt(2, 3)]; // Only × or ÷
-        const op2 = ops[getRandomInt(0, 3)]; // Any operation
+        const op1 = ops[getRandomInt(2, 3)];
+        const op2 = ops[getRandomInt(0, 3)];
         
         if (op1 === '×') {
           a = getRandomInt(1, 10);
           b = getRandomInt(1, 10);
           c = getRandomInt(1, 10);
           
-          // For multiplication first, then any operation
           const firstResult = a * b;
-          if (op2 === '+') {
-            answer = firstResult + c;
-          } else if (op2 === '-') {
-            answer = firstResult - c;
-          } else if (op2 === '×') {
-            answer = firstResult * c;
-          } else { // ÷
-            if (c === 0) continue;
-            if (firstResult % c !== 0) continue;
+          if (op2 === '+') answer = firstResult + c;
+          else if (op2 === '-') answer = firstResult - c;
+          else if (op2 === '×') answer = firstResult * c;
+          else {
+            if (c === 0 || firstResult % c !== 0) continue;
             answer = firstResult / c;
           }
           
           question = `${a} × ${b} ${op2} ${c} = `;
-        } else { // ÷
-          // Create division that results in integer
+        } else {
           const { dividend, divisor } = createDivision(100);
           a = dividend;
           b = divisor;
           c = getRandomInt(1, 10);
           
           const firstResult = a / b;
-          if (op2 === '+') {
-            answer = firstResult + c;
-          } else if (op2 === '-') {
-            answer = firstResult - c;
-          } else if (op2 === '×') {
-            answer = firstResult * c;
-          } else { // ÷
-            if (c === 0) continue;
-            if (firstResult % c !== 0) continue;
+          if (op2 === '+') answer = firstResult + c;
+          else if (op2 === '-') answer = firstResult - c;
+          else if (op2 === '×') answer = firstResult * c;
+          else {
+            if (c === 0 || firstResult % c !== 0) continue;
             answer = firstResult / c;
           }
           
@@ -234,8 +264,11 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     return { question, answer: answer.toString() };
   };
 
+  /**
+   * Evaluasi ekspresi matematika dengan urutan KABATAKU
+   */
   const evalKABATAKU = (tokens) => {
-    // First pass: Handle all × and ÷ from left to right
+    // Fase 1: Kali dan Bagi
     let i = 1;
     while (i < tokens.length) {
       const op = tokens[i];
@@ -247,7 +280,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
         if (op === '×') {
           result = left * right;
         } else {
-          if (right === 0) throw new Error("Division by zero");
+          if (right === 0) throw new Error("Pembagian dengan nol");
           result = Math.floor(left / right);
         }
         
@@ -258,7 +291,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
       }
     }
     
-    // Second pass: Handle all + and - from left to right
+    // Fase 2: Tambah dan Kurang
     let result = tokens[0];
     for (let i = 1; i < tokens.length; i += 2) {
       const op = tokens[i];
@@ -274,6 +307,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     return result;
   };
 
+  // Generate semua soal saat komponen dimuat
   const generateQuestions = () => {
     const questionsByLevel = {};
     for (let level = 1; level <= 10; level++) {
@@ -284,6 +318,9 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
 
   const questionsByLevel = generateQuestions();
 
+  /**
+   * Memulai game baru
+   */
   const startGame = () => {
     setCurrentTrack();
     setGameState({
@@ -302,6 +339,9 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     });
   };
 
+  /**
+   * Handler submit jawaban
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -314,17 +354,16 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     checkAnswer();
   };
 
+  /**
+   * Memeriksa jawaban user
+   */
   const checkAnswer = () => {
     const currentLevelQuestions = questionsByLevel[gameState.level];
     const isCorrect = gameState.userAnswer === gameState.currentQuestion.answer;
 
     playSound(isCorrect ? correctSound : wrongSound);
-
     setShowFeedback({ visible: true, isCorrect });
-
-    setTimeout(() => {
-      setShowFeedback({ visible: false, isCorrect: false });
-    }, 1500);
+    setTimeout(() => setShowFeedback({ visible: false, isCorrect: false }), 1500);
 
     const newAnswerHistory = [
       ...gameState.answerHistory,
@@ -359,6 +398,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     });
   };
 
+  // Timer effect
   useEffect(() => {
     let timer;
     if (gameState.isPlaying && gameState.timeLeft > 0 && !gameState.gameOver && !gameState.gameWon) {
@@ -394,6 +434,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     return () => clearInterval(timer);
   }, [gameState.timeLeft, gameState.isPlaying, gameState.gameOver, gameState.gameWon]);
 
+  // Game over/win effect
   useEffect(() => {
     if (gameState.gameOver) {
       playSound(gameoverSound);
@@ -407,6 +448,9 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     }
   }, [gameState.gameOver, gameState.gameWon, resetMusic]);
 
+  /**
+   * Kembali ke menu utama
+   */
   const handleBackToMenu = () => {
     resetMusic();
     navigate('/', { state: { from: 'math-adventure' } });
@@ -416,6 +460,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     <div className="math-adventure-container">
       {showFeedback.visible && <AnswerFeedback isCorrect={showFeedback.isCorrect} />}
 
+      {/* Tampilan Start */}
       {!gameState.isPlaying && !gameState.gameOver && !gameState.gameWon ? (
         <div className="game-start-screen">
           <div className="apple-logo">🍎</div>
@@ -450,6 +495,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
           </div>
         </div>
       ) : gameState.isPlaying ? (
+        /* Tampilan Game */
         <div className="game-play-screen">
           <div className="game-header">
             <div className="game-stat">
@@ -499,6 +545,7 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
           </div>
         </div>
       ) : (
+        /* Tampilan Game Over/Win */
         <div className="game-end-screen">
           <div className="game-result-header">
             {gameState.gameWon ? (

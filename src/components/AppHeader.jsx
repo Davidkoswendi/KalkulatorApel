@@ -1,3 +1,10 @@
+/**
+ * FILE: src/components/AppHeader.js
+ * KOMPONEN HEADER APLIKASI
+ * Fitur:
+ * Menampilkan judul di halaman kalkulator
+ */
+
 import React from 'react';
 
 const AppHeader = () => {

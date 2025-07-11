@@ -1,3 +1,10 @@
+/**
+ * FILE: src/components/AppFooter.js
+ * KOMPONEN FOOTER APLIKASI
+ * Fitur:
+ * untuk footer di halaman kalkulator
+ */
+
 import React from 'react';
 
 const AppFooter = () => {

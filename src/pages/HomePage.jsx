@@ -1,18 +1,31 @@
+/**
+ * FILE: src/pages/HomePage.js
+ * HALAMAN UTAMA APLIKASI
+ * - Tampilan awal/welcome screen
+ * - Navigasi ke fitur lain
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaAppleAlt, FaCalculator, FaVideo, FaGamepad } from 'react-icons/fa';
+import { FaAppleAlt, FaCalculator, FaVideo, FaGamepad, FaHome } from 'react-icons/fa';
 import '../styles/home.css';
 
 const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
-  const [showWelcome, setShowWelcome] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
-  const location = useLocation();
-  const [initialLoad, setInitialLoad] = useState(true);
+  // State untuk kontrol tampilan
+  const [showWelcome, setShowWelcome] = useState(true); // Tampilkan layar selamat datang
+  const [showLoading, setShowLoading] = useState(false); // Tampilkan loading screen
+  const location = useLocation(); // Untuk tracking rute
+  const [initialLoad, setInitialLoad] = useState(true); // Status load pertama kali
 
+  /**
+   * Handle tombol mulai
+   */
   const handleStart = () => {
-    setCurrentTrack();
-    setShowLoading(true);
-    setIsPlaying(true);
+    setCurrentTrack(); // Set musik default
+    setShowLoading(true); // Tampilkan loading
+    setIsPlaying(true); // Mainkan musik
+    
+    // Set timeout untuk simulasi loading
     setTimeout(() => {
       setShowWelcome(false);
       setShowLoading(false);
@@ -20,6 +33,7 @@ const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
     }, 2500);
   };
 
+  // Effect untuk handle navigasi dari halaman lain
   useEffect(() => {
     if (location.state?.from) {
       setShowWelcome(false);
@@ -31,7 +45,7 @@ const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
 
   return (
     <div className="home-container">
-      {/* Welcome Screen */}
+      {/* Welcome Screen (hanya tampil saat pertama kali) */}
       {initialLoad && showWelcome && !showLoading && (
         <div className="welcome-overlay">
           <div className="welcome-message">
@@ -62,16 +76,19 @@ const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Content (setelah loading selesai) */}
       {!showWelcome && !showLoading && (
         <>
+          {/* Hero Section */}
           <header className="hero-section">
             <div className="hero-content">
               <h1>
                 <FaAppleAlt className="title-apple" /> 
                 Kalkulator Apel
               </h1>
-              <p>Tingkatkan kemampuan matematika dengan permainan interaktif dan belajar dengan kalkulator Apel</p>
+              <p>Tingkatkan kemampuan matematika dengan permainan interaktif</p>
+              
+              {/* Tombol navigasi utama */}
               <div className="cta-buttons">
                 <Link to="/kalkulator" className="btn-primary" state={{ from: 'home' }}>
                   <FaCalculator /> Gunakan Kalkulator
@@ -86,28 +103,34 @@ const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
             </div>
           </header>
 
+          {/* Fitur-fitur aplikasi */}
           <section className="features-section">
             <h2 className="features-title">Fitur Kami</h2>
             <div className="features-grid">
+              {/* Card fitur 1 */}
               <div className="feature-card">
                 <div className="feature-icon">🍎</div>
                 <h3>Kalkulator Apel</h3>
-                <p>Belajar asik dengan Kalkulator apel yang melatih perhitungan,
-                   dan pembacaan angka dengan fisual apel yang memudahkan anak belajar berhitung</p>
+                <p>Belajar berhitung dengan visual apel yang interaktif</p>
               </div>
+              
+              {/* Card fitur 2 */}
               <div className="feature-card">
                 <div className="feature-icon">🎮</div>
                 <h3>Game Edukasi</h3>
-                <p>Belajar matematika melalui petualangan seru dengan level yang menantang</p>
+                <p>Petualangan matematika dengan level menantang</p>
               </div>
+              
+              {/* Card fitur 3 */}
               <div className="feature-card">
                 <div className="feature-icon">📈</div>
                 <h3>Tingkat Kesulitan</h3>
-                <p>10 level dengan soal yang semakin sulit untuk mengasah kemampuanmu</p>
+                <p>10 level dengan soal yang semakin sulit</p>
               </div>
             </div>
           </section>
 
+          {/* Footer */}
           <footer className="home-footer">
             <div className="footer-apples">
               {[...Array(5)].map((_, i) => (
