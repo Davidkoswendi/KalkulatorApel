@@ -17,9 +17,8 @@ const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
   const location = useLocation(); // Untuk tracking rute
   const [initialLoad, setInitialLoad] = useState(true); // Status load pertama kali
 
-  /**
-   * Handle tombol mulai
-   */
+ 
+  // Handle tombol mulai
   const handleStart = () => {
     setCurrentTrack(); // Set musik default
     setShowLoading(true); // Tampilkan loading

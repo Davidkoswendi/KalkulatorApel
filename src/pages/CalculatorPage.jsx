@@ -127,9 +127,7 @@ const CalculatorPage = () => {
     setHistory(prev => prev.filter(item => item.id !== id));
   };
 
-  /**
-   * Hapus semua riwayat
-   */
+  // Hapus semua riwayat
   const clearAllHistory = () => {
     setHistory([]);
   };
