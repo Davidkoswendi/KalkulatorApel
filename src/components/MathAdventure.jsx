@@ -455,6 +455,29 @@ const MathAdventure = ({ setCurrentTrack, resetMusic }) => {
     resetMusic();
     navigate('/', { state: { from: 'math-adventure' } });
   };
+useEffect(() => {
+  if (gameState.gameOver || gameState.gameWon) {
+    playSound(gameState.gameOver ? gameoverSound : winSound);
+    setGameState(prev => ({ ...prev, isPlaying: false }));
+    resetMusic();
+
+    // === ⬇️ Tambahkan bagian ini untuk menyimpan skor ke localStorage
+    const currentUser = JSON.parse(localStorage.getItem("mathAppUser"));
+    if (currentUser && currentUser.username) {
+      const allUsers = JSON.parse(localStorage.getItem("mathUsers")) || {};
+      const existingUser = allUsers[currentUser.username];
+
+      // Jika user terdaftar, dan skor sekarang lebih tinggi, update!
+      if (existingUser) {
+        const newScore = gameState.score;
+        if (!existingUser.highScore || newScore > existingUser.highScore) {
+          allUsers[currentUser.username].highScore = newScore;
+          localStorage.setItem("mathUsers", JSON.stringify(allUsers));
+        }
+      }
+    }
+  }
+}, [gameState.gameOver, gameState.gameWon, resetMusic]);
 
   return (
     <div className="math-adventure-container">

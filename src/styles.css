@@ -508,31 +508,6 @@ body {
     padding: 12px;
   }
 }
-/* Music Player Styles */
-.music-player-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-.music-player-btn:hover {
-  transform: scale(1.1);
-  background-color: var(--secondary);
-}
 
 .music-icon {
   margin-left: 5px;

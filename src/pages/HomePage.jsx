@@ -95,9 +95,13 @@ const HomePage = ({ setIsPlaying, setCurrentTrack }) => {
                 <Link to="/demo" className="btn-secondary" state={{ from: 'home' }}>
                   <FaVideo /> Lihat Demo
                 </Link>
-                <Link to="/math-adventure" className="btn-adventure">
-                  <FaGamepad /> Petualangan Matematika
-                </Link>
+<Link 
+  to="/login" 
+  className="btn-adventure"
+  state={{ from: 'math-adventure' }}
+>
+  <FaGamepad /> Petualangan Matematika
+</Link>
               </div>
             </div>
           </header>

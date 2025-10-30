@@ -1,0 +1,63 @@
+.book-selection {
+  text-align: center;
+  padding: 30px;
+  background: #fefefe;
+  min-height: 100vh;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.book-selection-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #2d3436;
+}
+
+.book-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.book-card {
+  width: 220px;
+  height: 280px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  padding: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  color: #2d3436;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.book-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.book-card p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .book-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .book-card {
+    width: 85%;
+    height: auto;
+  }
+}

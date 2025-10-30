@@ -1,0 +1,131 @@
+.leaderboard-page {
+  padding: 20px;
+  background: linear-gradient(145deg, #e6ecf0, #f9fbfc);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.leaderboard-page h2 {
+  font-size: 24px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Tabel leaderboard */
+.leaderboard-table {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.leaderboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  text-align: center;
+  padding: 12px 8px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.leaderboard-table th {
+  background-color: #f3f3f3;
+  color: #444;
+  font-weight: 600;
+}
+
+.leaderboard-table tr:hover {
+  background-color: #f0f8ff;
+}
+
+.highlight-row {
+  background-color: #d6f5e9;
+  font-weight: bold;
+  color: #1d4e32;
+}
+
+.medal {
+  font-size: 18px;
+}
+
+.gold {
+  color: #f6c342;
+}
+
+.silver {
+  color: #c0c0c0;
+}
+
+.bronze {
+  color: #cd7f32;
+}
+
+.rank-number {
+  background-color: #ddd;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 12px;
+}
+
+/* Responsive Styles */
+@media (min-width: 600px) {
+  .leaderboard-page {
+    padding: 30px;
+  }
+  
+  .leaderboard-page h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 15px 12px;
+    font-size: 16px;
+  }
+  
+  .medal {
+    font-size: 20px;
+  }
+  
+  .rank-number {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+}
+
+@media (min-width: 900px) {
+  .leaderboard-page {
+    padding: 40px;
+  }
+  
+  .leaderboard-page h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 18px 14px;
+    font-size: 18px;
+  }
+  
+  .medal {
+    font-size: 22px;
+  }
+  
+  .rank-number {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+}

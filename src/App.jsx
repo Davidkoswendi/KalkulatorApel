@@ -1,104 +1,161 @@
-/**
- * FILE: src/App.js
- * FILE UTAMA APLIKASI
- * - Mengatur semua routing aplikasi
- * - Mengontrol state musik global
- */
-
+// FILE: src/App.js
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
-// Import komponen halaman
+// Import halaman
 import HomePage from "./pages/HomePage";
 import CalculatorPage from "./pages/CalculatorPage";
 import DemoPage from "./pages/DemoPage";
+import Login from "./components/Login";
+
+import MathAdventurePage from "./pages/MathAdventurePage";
+import MathAdventure from "./components/MathAdventure";
+import QuizPage from "./pages/QuizPage";
+import StoryPage from "./pages/StoryPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
+
+// Buku catatan
+import BookSelectionPage from "./pages/BookSelectionPage";
+import NotesBook from "./pages/NotesBook";
+import DivisionBook from "./pages/DivisionBook";
+import PowerBook from "./pages/PowerBook";
+
+// Musik
 import MusicPlayer from "./components/MusicPlayer";
-import MathAdventure from './components/MathAdventure';
+import musicTrack from "./assets/sounds/music.mp3";
+import adventureTrack from "./assets/sounds/adventure-music.mp3";
 
-// Import file musik
-import musicTrack from './assets/sounds/music.mp3'; // Musik utama
-import adventureTrack from './assets/sounds/adventure-music.mp3'; // Musik game
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles.css";
 
-// Import CSS
-import "bootstrap/dist/css/bootstrap.min.css"; // CSS Bootstrap
-import "./styles.css"; // CSS custom
-
-
-// Komponen AppWrapper - Layout utama aplikasi
 const AppWrapper = () => {
-  // Mengambil lokasi/rute saat ini
   const location = useLocation();
-  
-  // State untuk kontrol musik:
-  const [isPlaying, setIsPlaying] = useState(false); // Status play/pause
-  const [currentTrack, setCurrentTrack] = useState(musicTrack); // Track yang aktif
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(musicTrack);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
 
-  // Effect untuk ganti musik otomatis berdasarkan rute
   useEffect(() => {
-    // Jika tidak di halaman petualangan, set musik default
-    if (!location.pathname.includes('math-adventure')) {
+    const savedUser = localStorage.getItem("mathAppUser");
+    if (savedUser) {
+      const { username } = JSON.parse(savedUser);
+      setIsLoggedIn(true);
+      setUsername(username);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!location.pathname.includes("math-adventure")) {
       setCurrentTrack(musicTrack);
     }
   }, [location]);
 
-  // Fungsi untuk reset musik ke default
+  const handleLogin = (username) => {
+    setIsLoggedIn(true);
+    setUsername(username);
+    localStorage.setItem("mathAppUser", JSON.stringify({ username }));
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    localStorage.removeItem("mathAppUser");
+  };
+
   const resetMusic = () => {
-    setCurrentTrack(musicTrack); // Set ke track utama
-    setIsPlaying(true); // Auto play
+    setCurrentTrack(musicTrack);
+    setIsPlaying(true);
   };
 
   return (
     <>
-      {/* Komponen pemutar musik */}
-      <MusicPlayer 
-        isPlaying={isPlaying} 
-        setIsPlaying={setIsPlaying} 
+      <MusicPlayer
+        isPlaying={isPlaying}
+        setIsPlaying={setIsPlaying}
         currentTrack={currentTrack}
       />
-      
-      {/* Sistem routing aplikasi */}
+
       <Routes>
-        {/* Halaman utama */}
-        <Route path="/" element={
-          <HomePage 
-            setIsPlaying={setIsPlaying} 
-            setCurrentTrack={() => setCurrentTrack(musicTrack)}
+        {/* Home */}
+        <Route
+          path="/"
+          element={
+            <HomePage
+              setIsPlaying={setIsPlaying}
+              setCurrentTrack={() => setCurrentTrack(musicTrack)}
+            />
+          }
+        />
+
+        {/* Login */}
+        <Route
+          path="/login"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/math-adventure" replace />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
+
+        {/* Petualangan matematika */}
+        <Route
+          path="/math-adventure"
+          element={
+            isLoggedIn ? (
+              <MathAdventurePage
+                username={username}
+                onLogout={handleLogout}
+              />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        >
+          <Route index element={<Navigate to="adventure" replace />} />
+          <Route
+            path="adventure"
+            element={
+              <MathAdventure
+                username={username}
+                setCurrentTrack={() => setCurrentTrack(adventureTrack)}
+                resetMusic={resetMusic}
+              />
+            }
           />
-        } />
-        
-        {/* Halaman game matematika */}
-        <Route path="/math-adventure" element={
-          <MathAdventure 
-            setCurrentTrack={() => setCurrentTrack(adventureTrack)}
-            resetMusic={resetMusic}
-          />
-        } />
-        
-        {/* Halaman kalkulator */}
+          <Route path="quiz" element={<QuizPage />} />
+          <Route path="story" element={<StoryPage />} />
+          <Route path="leaderboard" element={<LeaderboardPage />} />
+
+          {/* ✅ Nesting semua buku di sini */}
+          <Route path="notes" element={<BookSelectionPage />} />
+          <Route path="notes/perkalian" element={<NotesBook />} />
+          <Route path="notes/pembagian" element={<DivisionBook />} />
+          <Route path="notes/pangkat" element={<PowerBook />} />
+        </Route>
+
+        {/* Kalkulator & Demo */}
         <Route path="/kalkulator" element={<CalculatorPage />} />
-        
-        {/* Halaman demo/tutorial */}
         <Route path="/demo" element={<DemoPage />} />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );
 };
 
-
-// Komponen App utama yang membungkus dengan Router
-const App = () => {
-  return (
-    <Router>
-      <AppWrapper />
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <AppWrapper />
+  </Router>
+);
 
 export default App;
-
-//  Fungsi utilitas untuk memainkan efek suara
-export const playSound = (url) => {
-  const audio = new Audio(url); // Buat objek audio
-  audio.volume = 0.6; // Set volume menjadi 60%
-  audio.play().catch((err) => console.warn("Gagal memutar suara:", err));
-};
